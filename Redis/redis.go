@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"os"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -13,8 +14,14 @@ type RedisStruct struct {
 }
 
 func NewRedisClient() *RedisStruct {
-	opt, _ := redis.ParseURL("redis://red-cnmulbmn7f5s73d94d30:6379")
-	client := redis.NewClient(opt)
+	// opt, _ := redis.ParseURL("redis://red-cnmulbmn7f5s73d94d30:6379")
+	redisURL := os.Getenv("redisUrl")
+	redisPass := os.Getenv("redisPwd")
+	client := redis.NewClient(&redis.Options{
+		Addr:     redisURL,
+		Password: redisPass, // no password set
+		DB:       0,         // use default DB
+	})
 
 	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {
