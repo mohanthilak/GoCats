@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"net/url"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -13,8 +14,17 @@ type RedisStruct struct {
 }
 
 func NewRedisClient() *RedisStruct {
+	u, err := url.Parse("redis://red-cnmulbmn7f5s73d94d30:6379")
+	if err != nil {
+		panic(err)
+	}
+	host := u.Hostname()
+	port := u.Port()
+	if port == "" {
+		port = "6379" // Default port if not specified in the URL
+	}
 	client := redis.NewClient(&redis.Options{
-		Addr:     "redis://red-cnmulbmn7f5s73d94d30:6379",
+		Addr:     host + ":" + port,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
