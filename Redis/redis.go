@@ -14,7 +14,6 @@ type RedisStruct struct {
 }
 
 func NewRedisClient() *RedisStruct {
-	// opt, _ := redis.ParseURL("redis://red-cnmulbmn7f5s73d94d30:6379")
 	redisURL := os.Getenv("redisUrl")
 	redisPass := os.Getenv("redisPwd")
 	client := redis.NewClient(&redis.Options{
